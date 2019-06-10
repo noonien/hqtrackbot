@@ -1,0 +1,402 @@
+{
+  "Resources": {
+    "hqtrackbotvpc47E5171A": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/Resource"
+      }
+    },
+    "hqtrackbotvpcPublicSubnet1SubnetE3E8E70C": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.0.0/17",
+        "VpcId": {
+          "Ref": "hqtrackbotvpc47E5171A"
+        },
+        "AvailabilityZone": "us-west-1a",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Public"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1/Subnet"
+      }
+    },
+    "hqtrackbotvpcPublicSubnet1RouteTable3715F259": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "hqtrackbotvpc47E5171A"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1/RouteTable"
+      }
+    },
+    "hqtrackbotvpcPublicSubnet1RouteTableAssociation519BF3E3": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "hqtrackbotvpcPublicSubnet1RouteTable3715F259"
+        },
+        "SubnetId": {
+          "Ref": "hqtrackbotvpcPublicSubnet1SubnetE3E8E70C"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1/RouteTableAssociation"
+      }
+    },
+    "hqtrackbotvpcPublicSubnet1DefaultRoute483B6281": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "hqtrackbotvpcPublicSubnet1RouteTable3715F259"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "hqtrackbotvpcIGW731B2B5A"
+        }
+      },
+      "DependsOn": [
+        "hqtrackbotvpcVPCGW7AC262CD"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1/DefaultRoute"
+      }
+    },
+    "hqtrackbotvpcPublicSubnet1EIPE30683F8": {
+      "Type": "AWS::EC2::EIP",
+      "Properties": {
+        "Domain": "vpc"
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1/EIP"
+      }
+    },
+    "hqtrackbotvpcPublicSubnet1NATGatewayA6B03479": {
+      "Type": "AWS::EC2::NatGateway",
+      "Properties": {
+        "AllocationId": {
+          "Fn::GetAtt": [
+            "hqtrackbotvpcPublicSubnet1EIPE30683F8",
+            "AllocationId"
+          ]
+        },
+        "SubnetId": {
+          "Ref": "hqtrackbotvpcPublicSubnet1SubnetE3E8E70C"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PublicSubnet1/NATGateway"
+      }
+    },
+    "hqtrackbotvpcPrivateSubnet1Subnet1057E508": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "CidrBlock": "10.0.128.0/17",
+        "VpcId": {
+          "Ref": "hqtrackbotvpc47E5171A"
+        },
+        "AvailabilityZone": "us-west-1a",
+        "MapPublicIpOnLaunch": false,
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc/PrivateSubnet1"
+          },
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Private"
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PrivateSubnet1/Subnet"
+      }
+    },
+    "hqtrackbotvpcPrivateSubnet1RouteTable90271E0B": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "hqtrackbotvpc47E5171A"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc/PrivateSubnet1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PrivateSubnet1/RouteTable"
+      }
+    },
+    "hqtrackbotvpcPrivateSubnet1RouteTableAssociation3BBF91FA": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "hqtrackbotvpcPrivateSubnet1RouteTable90271E0B"
+        },
+        "SubnetId": {
+          "Ref": "hqtrackbotvpcPrivateSubnet1Subnet1057E508"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PrivateSubnet1/RouteTableAssociation"
+      }
+    },
+    "hqtrackbotvpcPrivateSubnet1DefaultRoute5C30C84B": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "hqtrackbotvpcPrivateSubnet1RouteTable90271E0B"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": {
+          "Ref": "hqtrackbotvpcPublicSubnet1NATGatewayA6B03479"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/PrivateSubnet1/DefaultRoute"
+      }
+    },
+    "hqtrackbotvpcIGW731B2B5A": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "hqtrackbot/hqtrackbot-vpc"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/IGW"
+      }
+    },
+    "hqtrackbotvpcVPCGW7AC262CD": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "hqtrackbotvpc47E5171A"
+        },
+        "InternetGatewayId": {
+          "Ref": "hqtrackbotvpcIGW731B2B5A"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-vpc/VPCGW"
+      }
+    },
+    "hqtrackbotcluster20393E2A": {
+      "Type": "AWS::ECS::Cluster",
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-cluster/Resource"
+      }
+    },
+    "hqtrackbottaskdefinitionTaskRoleBA416C40": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "ecs-tasks.",
+                      {
+                        "Ref": "AWS::URLSuffix"
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-task-definition/TaskRole/Resource"
+      }
+    },
+    "hqtrackbottaskdefinition3490E790": {
+      "Type": "AWS::ECS::TaskDefinition",
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "REDDIT_SUBREDDITS",
+                "Value": "hqtrackbot+electronicmusic+techno+proghouse+liquiddubstep+house+tech_house+OldSkoolDance+acidhouse+ambientmusic+AtmosphericDnB+BigBeat+boogiemusic+breakbeat+chicagohouse+chillout+Chipbreak+Chiptunes+complextro+cxd+darkstep+deephouse+DnB+DubStep+EDM+EBM+electronicdancemusic+ElectronicJazz+ElectronicBlues+electrohiphop+electrohouse+electronicmagic+electropop+electroswing+ExperimentalMusic+fidget+filth+frenchelectro+frenchhouse+funkhouse+fusiondancemusic+futurebeats+FutureFunkAirlines+FutureGarage+futuresynth+gabber+glitch+glitchop+Grime+happyhardcore+hardhouse+hardstyle+idm+industrialmusic+ItaloDisco+latinhouse+mashups+melodichouse+minimal+mixes+moombahcore+nightstep+OldskoolRave+Outrun+theOverload+partymusic+plunderphonics+psybient+PsyBreaks+psytrance+purplemusic+raggajungle+RealDubstep+skweee+swinghouse+tranceandbas+trap+tribalbeats+TropicalHouse+ukfunky+witchhouse+wuuB+SirBerryDinglesDiscog+AfroBashment"
+              },
+              {
+                "Name": "AWS_ACCESS_KEY_ID",
+                "Value": "{{resolve:ssm-secure:HQTB_AWS_ACCESS_KEY_ID:1}}"
+              },
+              {
+                "Name": "HQTB_AWS_METRIC_STREAM_ID",
+                "Value": "{{resolve:ssm-secure:HQTB_AWS_METRIC_STREAM_ID:1}}"
+              },
+              {
+                "Name": "HQTB_AWS_SECRET_ACCESS_KEY",
+                "Value": "{{resolve:ssm-secure:HQTB_AWS_SECRET_ACCESS_KEY:1}}"
+              },
+              {
+                "Name": "HQTB_REDDIT_CLIENT_ID",
+                "Value": "{{resolve:ssm-secure:HQTB_REDDIT_CLIENT_ID:1}}"
+              },
+              {
+                "Name": "HQTB_REDDIT_CLIENT_SECRET",
+                "Value": "{{resolve:ssm-secure:HQTB_REDDIT_CLIENT_SECRET:1}}"
+              },
+              {
+                "Name": "HQTB_REDDIT_PASSWORD",
+                "Value": "{{resolve:ssm-secure:HQTB_REDDIT_PASSWORD:1}}"
+              },
+              {
+                "Name": "HQTB_REDDIT_USERNAME",
+                "Value": "{{resolve:ssm-secure:HQTB_REDDIT_USERNAME:1}}"
+              },
+              {
+                "Name": "HQTB_YOUTUBE_DEVELOPER_KEY",
+                "Value": "{{resolve:ssm-secure:HQTB_YOUTUBE_DEVELOPER_KEY:1}}"
+              }
+            ],
+            "Essential": true,
+            "Image": "scottbrenner/hqtrackbot:latest",
+            "Links": [],
+            "MountPoints": [],
+            "Name": "hqtrackbot-container",
+            "PortMappings": [],
+            "Ulimits": [],
+            "VolumesFrom": []
+          }
+        ],
+        "Cpu": "256",
+        "Family": "hqtrackbothqtrackbottaskdefinition2AA7FD1E",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE"
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "hqtrackbottaskdefinitionTaskRoleBA416C40",
+            "Arn"
+          ]
+        },
+        "Volumes": []
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-task-definition/Resource"
+      }
+    },
+    "hqtrackbotfargateserviceService49E7222D": {
+      "Type": "AWS::ECS::Service",
+      "Properties": {
+        "TaskDefinition": {
+          "Ref": "hqtrackbottaskdefinition3490E790"
+        },
+        "Cluster": {
+          "Ref": "hqtrackbotcluster20393E2A"
+        },
+        "DeploymentConfiguration": {
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50
+        },
+        "DesiredCount": 1,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::GetAtt": [
+                  "hqtrackbotfargateserviceSecurityGroup7293B170",
+                  "GroupId"
+                ]
+              }
+            ],
+            "Subnets": [
+              {
+                "Ref": "hqtrackbotvpcPrivateSubnet1Subnet1057E508"
+              }
+            ]
+          }
+        },
+        "ServiceName": "hqtrackbot-service",
+        "ServiceRegistries": []
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-fargate-service/Service"
+      }
+    },
+    "hqtrackbotfargateserviceSecurityGroup7293B170": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "hqtrackbot/hqtrackbot-fargate-service/SecurityGroup",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1"
+          }
+        ],
+        "SecurityGroupIngress": [],
+        "VpcId": {
+          "Ref": "hqtrackbotvpc47E5171A"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "hqtrackbot/hqtrackbot-fargate-service/SecurityGroup/Resource"
+      }
+    }
+  }
+}
